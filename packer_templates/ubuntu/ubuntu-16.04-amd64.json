@@ -230,12 +230,6 @@
       "vm_name": "{{ user `template` }}"
     }
   ],
-  "post-processors": [
-    {
-      "output": "{{ user `build_directory` }}/{{user `box_basename`}}.{{.Provider}}.box",
-      "type": "vagrant"
-    }
-  ],
   "provisioners": [
     {
       "environment_vars": [
@@ -263,6 +257,13 @@
       "type": "shell"
     }
   ],
+  "post-processors": [
+     {
+      "output": "{{ user `build_directory` }}/{{user `box_basename`}}.{{.Provider}}.box",
+	  "keep_input_artifact": true,
+      "type": "vagrant"
+    }
+ ],
   "variables": {
     "box_basename": "ubuntu-16.04",
     "build_directory": "../../builds",
