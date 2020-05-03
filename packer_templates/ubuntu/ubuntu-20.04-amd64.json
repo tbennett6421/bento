@@ -108,7 +108,7 @@
         " -- <wait>",
         "<enter><wait>"
       ],
-      "boot_wait": "10s",
+      "boot_wait": "15s",
       "tools_upload_flavor": "linux"
     }
   ],
