@@ -2,33 +2,38 @@
   "builders": [
     {
       "type": "virtualbox-iso",
+      "cpus": "{{ user `cpus` }}",
+      "memory": "{{ user `memory` }}",
+      "hard_drive_interface": "sata",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--vram", "48"],
         ["modifyvm", "{{.Name}}", "--audio", "none"]
       ],
-      "memory": "{{ user `memory` }}",
-      "cpus": "{{ user `cpus` }}",
-      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
-      "guest_additions_url": "{{ user `guest_additions_url` }}",
-      "guest_additions_path": "C:/users/vagrant/VBoxGuestAdditions.iso",
-      "guest_os_type": "Windows10_64",
-      "hard_drive_interface": "sata",
-      "iso_interface": "sata",
-      "headless": "{{ user `headless` }}",
-      "iso_url": "{{ user `iso_url` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "sha1",
-      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-virtualbox",
-      "communicator": "winrm",
+	  
+	  "headless": "{{ user `headless` }}",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "shutdown_timeout": "15m",
+      
+	  "communicator": "winrm",
       "winrm_username": "vagrant",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-      "shutdown_timeout": "15m",
+      
+	  "iso_interface": "sata",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      
       "floppy_files": [
         "{{ user `floppy_dir` }}/{{ user `unattended_file_path` }}",
         "{{template_dir}}/scripts/base_setup.ps1"
-      ]
+      ],
+	  "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-virtualbox",
+	  
+      "guest_additions_mode": "{{ user `guest_additions_mode` }}",
+      "guest_additions_url": "{{ user `guest_additions_url` }}",
+      "guest_additions_path": "C:/users/vagrant/VBoxGuestAdditions.iso",
+      "guest_os_type": "Windows10_64"
     },
     {
       "type": "vmware-iso",
