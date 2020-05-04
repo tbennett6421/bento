@@ -38,26 +38,31 @@
     {
       "type": "vmware-iso",
       "version": 11,
-      "memory": "{{ user `memory` }}",
       "cpus": "{{ user `cpus` }}",
+      "memory": "{{ user `memory` }}",
       "disk_adapter_type": "lsisas1068",
-      "guest_os_type": "windows9srv-64",
+
       "headless": "{{ user `headless` }}",
-      "iso_url": "{{ user `iso_url` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "sha1",
-      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-vmware",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "shutdown_timeout": "15m",
+
       "communicator": "winrm",
-      "tools_upload_flavor": "windows",
-      "tools_upload_path": "c:/Windows/Temp/vmware.iso",
       "winrm_username": "vagrant",
       "winrm_password": "vagrant",
       "winrm_timeout": "12h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-      "shutdown_timeout": "15m",
-      "floppy_files": [
+
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      
+	  "floppy_files": [
         "{{ user `floppy_dir` }}/{{ user `unattended_file_path` }}"
-      ]
+      ],
+      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-vmware",
+
+      "guest_os_type": "windows9srv-64",
+      "tools_upload_flavor": "windows",
+      "tools_upload_path": "c:/Windows/Temp/vmware.iso"
     }
   ],
   "provisioners": [{
