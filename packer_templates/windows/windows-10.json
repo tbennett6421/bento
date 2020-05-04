@@ -1,25 +1,5 @@
 {
-  "builders": [{
-      "type": "hyperv-iso",
-      "switch_name": "{{user `hyperv_switch`}}",
-      "memory": "{{ user `memory` }}",
-      "cpus": "{{ user `cpus` }}",
-      "headless": "{{ user `headless` }}",
-      "iso_url": "{{ user `iso_url` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "sha1",
-      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-virtualbox",
-      "communicator": "winrm",
-      "winrm_username": "vagrant",
-      "winrm_password": "vagrant",
-      "winrm_timeout": "12h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-      "shutdown_timeout": "15m",
-      "floppy_files": [
-        "{{ user `floppy_dir` }}/{{ user `unattended_file_path` }}",
-        "{{template_dir}}/scripts/base_setup.ps1"
-      ]
-    },
+  "builders": [
     {
       "type": "virtualbox-iso",
       "vboxmanage": [
@@ -51,32 +31,6 @@
       ]
     },
     {
-      "type": "parallels-iso",
-      "memory": "{{ user `memory` }}",
-      "cpus": "{{ user `cpus` }}",
-      "guest_os_type": "win-10",
-      "iso_url": "{{ user `iso_url` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "sha1",
-      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-parallels",
-      "parallels_tools_flavor": "win",
-      "parallels_tools_mode" : "attach",
-      "prlctl_version_file": ".prlctl_version",
-      "communicator": "winrm",
-      "winrm_username": "vagrant",
-      "winrm_password": "vagrant",
-      "winrm_timeout": "12h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-      "shutdown_timeout": "15m",
-      "prlctl": [
-        ["set", "{{.Name}}", "--efi-boot", "off"]
-      ],
-      "floppy_files": [
-        "{{ user `floppy_dir` }}/{{ user `unattended_file_path` }}",
-        "{{template_dir}}/scripts/base_setup.ps1"
-      ]
-    },
-    {
       "type": "vmware-iso",
       "version": 11,
       "memory": "{{ user `memory` }}",
@@ -96,32 +50,6 @@
       "winrm_timeout": "12h",
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "shutdown_timeout": "15m",
-      "floppy_files": [
-        "{{ user `floppy_dir` }}/{{ user `unattended_file_path` }}",
-        "{{template_dir}}/scripts/base_setup.ps1"
-      ]
-    },
-    {
-      "type": "qemu",
-      "memory": "{{ user `memory` }}",
-      "cpus": "{{ user `cpus` }}",
-      "headless": "{{ user `headless` }}",
-      "iso_url": "{{ user `iso_url` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "sha1",
-      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-qemu",
-      "communicator": "winrm",
-      "winrm_username": "vagrant",
-      "winrm_password": "vagrant",
-      "winrm_timeout": "12h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-      "shutdown_timeout": "15m",
-      "qemuargs": [
-        [ "-m", "{{ user `memory` }}" ],
-        [ "-smp", "{{ user `cpus` }}" ],
-        [ "-drive", "file={{ user `virtio_win_iso` }},media=cdrom,index=3" ],
-        [ "-drive", "file={{ user `build_directory` }}/packer-{{ user `template` }}-qemu/{{ .Name }},if=virtio,cache=writeback,discard=ignore,format=qcow2,index=1" ]
-      ],
       "floppy_files": [
         "{{ user `floppy_dir` }}/{{ user `unattended_file_path` }}",
         "{{template_dir}}/scripts/base_setup.ps1"
@@ -191,12 +119,10 @@
     "guest_additions_mode": "attach",
     "guest_additions_url": "",
     "headless": "true",
-    "hyperv_switch": "{{env `hyperv_switch`}}",
     "iso_checksum": "489ebee676e26cdb81377b0e6385c001a22589b8",
     "iso_url": "https://software-download.microsoft.com/download/pr/18363.418.191007-0143.19h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso",
     "memory": "4096",
     "template": "windows-10",
-    "unattended_file_path": "10/Autounattend.xml",
-    "virtio_win_iso": "~/virtio-win.iso"
+    "unattended_file_path": "10/Autounattend.xml"
   }
 }
