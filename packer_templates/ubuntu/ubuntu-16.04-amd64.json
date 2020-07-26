@@ -65,7 +65,6 @@
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `mirror`}}/{{user `mirror_directory`}}/{{user `iso_name`}}",
 
-      "http_directory": "{{user `http_directory`}}",
       "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-vmware",
 
       "cpus": "{{ user `cpus` }}",
@@ -84,35 +83,101 @@
       "ssh_port": 22,
       "ssh_timeout": "10000s",
 
+      "floppy_files": [
+        "{{user `http_directory`}}/preseed.cfg"
+      ],
+
       "boot_command": [
-        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "/install/vmlinuz<wait>",
-        " auto<wait>",
-        " console-setup/ask_detect=false<wait>",
-        " console-setup/layoutcode=us<wait>",
-        " console-setup/modelcode=pc105<wait>",
-        " debconf/frontend=noninteractive<wait>",
-        " debian-installer=en_US.UTF-8<wait>",
-        " fb=false<wait>",
-        " initrd=/install/initrd.gz<wait>",
-        " kbd-chooser/method=us<wait>",
-        " keyboard-configuration/layout=USA<wait>",
-        " keyboard-configuration/variant=USA<wait>",
-        " locale=en_US.UTF-8<wait>",
-        " netcfg/get_domain=vm<wait>",
-        " netcfg/get_hostname=vagrant<wait>",
-        " grub-installer/bootdev=/dev/sda<wait>",
-        " noapic<wait>",
-        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed_path`}}<wait>",
-        " -- <wait>",
-        "<enter><wait>"
+        "<enter><wait><f6><wait><esc><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs>",
+        "/install/vmlinuz",
+        " initrd=/install/initrd.gz",
+        " priority=critical",
+        " locale=en_US",
+        " file=/media/preseed.cfg",
+        "<enter>"
       ],
       "boot_wait": "15s",
       "tools_upload_flavor": "linux"
-    }
+    },
+    {	
+      "type": "vsphere-iso",
+      "guest_os_type": "ubuntu64Guest",
+
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `mirror`}}/{{user `mirror_directory`}}/{{user `iso_name`}}",
+      "iso_paths": [
+        "[{{user `vcenter_datastore`}}] ISO/OS/Linux/{{user `iso_name`}}"
+      ],
+      
+      "CPUs":             	 "{{ user `cpus` }}",
+      "RAM":              	 "{{ user `memory` }}",
+      "RAM_reserve_all": true,
+	  
+	  "storage": [{
+	    "disk_size": 		 "{{user `disk_size`}}",
+		"disk_thin_provisioned": true
+	  }],
+      "disk_controller_type":  "pvscsi",
+      "network_adapters": [{
+		"network": "VM Network",
+		"network_card": "vmxnet3"
+	  }],
+
+      "vcenter_server":      "{{user `vcenter_server`}}",
+      "username":            "{{user `vcenter_username`}}",
+      "password":            "{{user `vcenter_password`}}",
+      "insecure_connection": "{{user `vcenter_insecure`}}",
+
+      "vm_name": 			 "{{ user `template` }}",
+	  "folder":				 "{{user `vcenter_folder`}}",
+	  "cluster":			 "{{user `vcenter_cluster`}}",
+      "host":     			 "{{user `vcenter_esxi_host`}}",
+      "datastore": 			 "{{user `vcenter_datastore`}}",
+
+     "export": {
+		"force": true,
+		"output_directory": 	 "{{ user `build_directory` }}/packer-{{user `template`}}-vsphere"
+	  },
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_timeout": "10000s",
+	  
+      "floppy_files": [
+        "{{user `http_directory`}}/preseed.cfg"
+      ],
+
+      "boot_command": [
+        "<enter><wait><f6><wait><esc><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs>",
+        "/install/vmlinuz",
+        " initrd=/install/initrd.gz",
+        " priority=critical",
+        " locale=en_US",
+        " file=/media/preseed.cfg",
+        "<enter>"
+      ]
+    }		
   ],
   "provisioners": [
     {
@@ -142,7 +207,8 @@
      {
       "output": "{{ user `build_directory` }}/{{user `box_basename`}}.{{.Provider}}.box",
 	  "keep_input_artifact": true,
-      "type": "vagrant"
+      "type": "vagrant",
+      "except": ["vsphere-iso"]
     }
  ],
   "variables": {
@@ -162,14 +228,24 @@
     "git_revision": "__unknown_git_revision__",
     "guest_additions_url": "",
 
-    "iso_checksum": "16afb1375372c57471ea5e29803a89a5a6bd1f6aabea2e5e34ac1ab7eb9786ac",
-    "iso_checksum_type": "sha256",
-    "iso_name": "ubuntu-16.04.6-server-amd64.iso",
+    "iso_checksum": "a06cd926f5855d4f21fb4bc9978a35312f815fbda0d0ef7fdc846861f4fc4600",
+    "iso_checksum_type": "sha256",	
+    "iso_name": "ubuntu-16.04.3-server-amd64.iso",
     "mirror": "http://releases.ubuntu.com",
-    "mirror_directory": "16.04.6",
+    "mirror_directory": "16.04.3",
     "name": "ubuntu-16.04",
     "preseed_path": "preseed.cfg",
     "template": "ubuntu-16.04-amd64",
-    "version": "TIMESTAMP"
+    "version": "TIMESTAMP",
+	
+	"vcenter_server":		"<SYMBOL>",
+    "vcenter_username":     "<SYMBOL>",
+    "vcenter_password":     "<SYMBOL>",
+	"vcenter_insecure":		"true",
+	"vcenter_folder":		"<SYMBOL>",
+	"vcenter_cluster":		"<SYMBOL>",
+	"vcenter_esxi_host":	"<SYMBOL>",
+	"vcenter_datastore":	"<SYMBOL>"
+	
   }
 }
