@@ -169,6 +169,16 @@
     "name": "ubuntu-20.04",
     "preseed_path": "preseed.cfg",
     "template": "ubuntu-20.04-amd64",
-    "version": "TIMESTAMP"
+    "version": "TIMESTAMP",
+	
+	"vcenter_server":		"<SYMBOL>",
+    "vcenter_username":     "<SYMBOL>",
+    "vcenter_password":     "<SYMBOL>",
+	"vcenter_insecure":		"true",
+	"vcenter_folder":		"<SYMBOL>",
+	"vcenter_cluster":		"<SYMBOL>",
+	"vcenter_esxi_host":	"<SYMBOL>",
+	"vcenter_datastore":	"<SYMBOL>"
+	
   }
 }
