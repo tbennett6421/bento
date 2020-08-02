@@ -204,12 +204,23 @@
     }
   ],
   "post-processors": [
-     {
+    {
+      "type": "vagrant",
       "output": "{{ user `build_directory` }}/{{user `box_basename`}}.{{.Provider}}.box",
 	  "keep_input_artifact": true,
-      "type": "vagrant",
       "except": ["vsphere-iso"]
-    }
+    },
+	{
+	  "checksum_types": ["md5", "sha1", "sha256"],
+      "type": "checksum",
+      "output": "{{ user `build_directory` }}/{{user `box_basename`}}_{{.BuilderType}}_{{.ChecksumType}}.checksum"
+	},	
+	{
+	  "type": "compress",
+      "keep_input_artifact": true,
+      "output": "{{ user `build_directory` }}/{{user `box_basename`}}_{{.BuilderType}}.tar.gz"
+	  
+	}
  ],
   "variables": {
     "box_basename": "ubuntu-16.04",
